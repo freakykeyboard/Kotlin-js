@@ -21,10 +21,10 @@ val App = fc<Props> { _ ->
     ul {
         taskList.forEach { item ->
             li {
-                attrs.onClickFunction={
+                attrs.onClickFunction = {
                     scope.launch {
                         deleteTask(item)
-                        taskList=getTaslList()
+                        taskList = getTaslList()
                     }
                 }
                 key = item.toString()
@@ -32,12 +32,12 @@ val App = fc<Props> { _ ->
             }
         }
     }
-    child(inputComponent){
-        attrs.onSubmit={input->
-            val forumEntry=TaskItem(input)
+    child(inputComponent) {
+        attrs.onSubmit = { input ->
+            val forumEntry = TaskItem(input)
             scope.launch {
                 addTask(forumEntry)
-                taskList=getTaslList()
+                taskList = getTaslList()
             }
         }
     }

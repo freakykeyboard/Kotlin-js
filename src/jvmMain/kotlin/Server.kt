@@ -26,34 +26,36 @@ fun HTML.index() {
         script(src = "/static/Forum.js") {}
     }
 }
-val forumEntries= mutableListOf(
-    TaskItem("Aufgabe erledeigne"),
-    TaskItem("Wie entwickle ein Multiplatform projekt mit Kotlin")
+
+val taskList = mutableListOf(
+    TaskItem("Aufgabe erledigen"),
+    TaskItem("Wie entwickle ein Multiplatform Projekt mit Kotlin")
 )
+
 fun main() {
     embeddedServer(Netty, port = 8080, host = "127.0.0.1") {
-        install(ContentNegotiation){
+        install(ContentNegotiation) {
             json()
         }
-        install(CORS){
+        install(CORS) {
             method(HttpMethod.Get)
             method(HttpMethod.Post)
             method(HttpMethod.Delete)
             anyHost()
         }
-        install(Compression){
+        install(Compression) {
             gzip()
         }
         routing {
-            route(TaskItem.path){
-                get { call.respond(forumEntries) }
+            route(TaskItem.path) {
+                get { call.respond(taskList) }
                 post {
-                    forumEntries+=call.receive<TaskItem>()
+                    taskList += call.receive<TaskItem>()
                     call.respond(HttpStatusCode.OK)
                 }
                 delete("/{id}") {
-                    val id=call.parameters["id"]?.toInt()?: error("Invalid delete request")
-                    forumEntries.removeIf { it.id==id }
+                    val id = call.parameters["id"]?.toInt() ?: error("Invalid delete request")
+                    taskList.removeIf { it.id == id }
                     call.respond(HttpStatusCode.OK)
                 }
             }
